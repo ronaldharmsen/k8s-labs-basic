@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  my-app
+  namespace: demo
+  labels:
+    app:  my-app
+spec:
+  selector:
+    matchLabels:
+      app: my-app
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app:  my-app
+    spec:
+      securityContext:
+        runAsUser: 1001
+        runAsGroup: 1000
+        fsGroup: 0
+
+      containers:
+      - name:  my-app
+        image: gcr.io/google-samples/node-hello:1.0
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort:  80
+          name:  my-app
+        securityContext:
+          capabilities:
+            add: ["NET_ADMIN", "CAP_NET_BIND_SERVICE"]
+
+      restartPolicy: Always
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-app
+  namespace: demo
+spec:
+  selector:
+    app: my-app
+  type: NodePort
+  ports:
+  - name: my-app
+    protocol: TCP
+    port: 80
+    targetPort: 80

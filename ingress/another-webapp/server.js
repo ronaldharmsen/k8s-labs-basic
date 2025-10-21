@@ -12,8 +12,9 @@ const HOST = '0.0.0.0';
 // App
 const app = express();
 app.get('/', (req, res) => {
-  const msg = `${process.env.APPNAME}`;
-  res.send(`<html><head><style>body { background-color: ${process.env.COLOR}</style></head><body><h3>APP: ${msg}</h3></body></html>\n`);
+  const app = `${process.env.APPNAME}`;
+  const instance = `${process.env.HOSTNAME}`;
+  res.send(`<html><head><style>body { background-color: ${process.env.COLOR}</style></head><body><h3>APP: ${app}</h3><h4>${instance}</h4></body></html>\n`);
 });
 
 app.get('/_status/healthz', (req, res) => {

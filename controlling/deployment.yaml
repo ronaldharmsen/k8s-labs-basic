@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  extra-app
+  namespace: controlling
+  labels:
+    app:  extra-app
+spec:
+ selector:
+    matchLabels:
+      app: extra-app
+ replicas: 1
+ template:
+    metadata:
+      labels:
+        app:  extra-app
+    spec:
+      containers:
+      - name:  extra-app
+        image: gcr.io/google-samples/node-hello:1.0
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 100m
+            memory: 100Mi
+        securityContext:
+#          runAsNonRoot: true
+          runAsUser: 2000
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
+          seccompProfile:
+            type: RuntimeDefault
+      restartPolicy: Always
