@@ -30,7 +30,7 @@ NOTE: if you are running this in Minikube run the following command to open (por
 
 If you want to debug locally we can also do port forwarding from localhost to some port inside the cluster.
 
-`kubectl port-forward deployment/webapp 9000:8080`
+`kubectl port-forward svc/webapp 9000:8080`
 
 When we stop this process, the forwarding is also terminated. So not really suitable for production, but could work nicely to develop or debug services.
 
